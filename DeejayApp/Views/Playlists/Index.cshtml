@@ -1,0 +1,71 @@
+﻿@model IEnumerable<DeejayApp.Models.Playlist>
+
+@{
+    ViewBag.Title = "Playlists";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Playlists</h2>
+
+<div class="row">
+    <div class="col-md-2">
+        @if (Request.IsAuthenticated)
+            {
+            <p>
+                @Html.ActionLink("Create New", "Create", "Playlists", new { @class = "btn btn-default" })
+            </p>
+        }
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        @using (Html.BeginForm("Index", "Playlists", FormMethod.Post, new { @class = "form-inline" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.TextBox("SearchString", "", new { @class = "form-control" })
+            </div>
+            <input type="submit" value="Search" class="btn btn-default" />
+        }
+    </div>
+</div>
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PlaylistName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedTime)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlaylistName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedTime)
+            </td>
+            @if (Request.IsAuthenticated)
+            {
+                <td>
+                    @Html.ActionLink("Listen", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.ActionLink("Listen", "Details", new { id = item.Id })
+                </td>
+            }
+
+
+        </tr>
+    }
+
+</table>
